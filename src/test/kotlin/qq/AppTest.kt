@@ -3,7 +3,6 @@
  */
 package qq
 
-import com.sun.xml.internal.bind.v2.runtime.Coordinator
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -39,6 +38,7 @@ class AppTest {
                 "SW", "S", "SE"),
                 neightbourOf(10, 10))
     }
+
     @Test
     fun `Can translate Direction names to relative positions`() {
         assertEquals(listOf(
@@ -46,26 +46,26 @@ class AppTest {
                 "W", "E",
                 "SW", "S", "SE").map { toRelativePosition(it) },
                 listOf(
-                        Coord(-1,-1), Coord(0,-1),  Coord(1,-1),
-                        Coord(-1,0),                       Coord(1,0),
-                        Coord(-1, 1), Coord(0,1),   Coord(1,1)))
+                        Coord(-1, -1), Coord(0, -1), Coord(1, -1),
+                        Coord(-1, 0), Coord(1, 0),
+                        Coord(-1, 1), Coord(0, 1), Coord(1, 1)))
     }
 
     private fun toRelativePosition(directionName: String): Coord {
-        return when(directionName){
-            "NW"->Coord(-1,-1)
-            "N"-> Coord(0,-1)
-            "NE"-> Coord(1,-1)
-            "W"->Coord(-1,0)
-            "E"->Coord(1,0)
-            "SW"->Coord(-1, 1)
-            "S"->Coord(0,1)
-            "SE"->Coord(1,1)
+        return when (directionName) {
+            "NW" -> Coord(-1, -1)
+            "N" -> Coord(0, -1)
+            "NE" -> Coord(1, -1)
+            "W" -> Coord(-1, 0)
+            "E" -> Coord(1, 0)
+            "SW" -> Coord(-1, 1)
+            "S" -> Coord(0, 1)
+            "SE" -> Coord(1, 1)
             else -> throw Exception("Huh?!")
         }
     }
 
-    data class Coord (val x: Int, val y:Int)
+    data class Coord(val x: Int, val y: Int)
 
     private fun neightbourOf(x: Int, y: Int): List<String> {
         return listOf("NW", "N", "NE",
