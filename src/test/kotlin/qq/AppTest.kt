@@ -99,12 +99,12 @@ class AppTest {
 
     @Test
     fun `Can find deaths`() {
-        assertEquals(setOf(Coordinates.Absolute(1,1)), findDeaths(World(setOf(Coordinates.Absolute(1,1))), World(emptySet())))
+        assertEquals(setOf(Coordinates.Absolute(1, 1)), findDeaths(World(setOf(Coordinates.Absolute(1, 1))), World(emptySet())))
     }
 
     @Test
     fun `Can find births`() {
-        assertEquals(setOf(Coordinates.Absolute(1,1)), findBirths(World(emptySet()), World(setOf(Coordinates.Absolute(1,1)))))
+        assertEquals(setOf(Coordinates.Absolute(1, 1)), findBirths(World(emptySet()), World(setOf(Coordinates.Absolute(1, 1)))))
     }
 
     private fun findBirths(previous: World, current: World): Set<Coordinates.Absolute> {
@@ -125,9 +125,9 @@ class AppTest {
 
         fun evolve(): World {
             val deaths = aliveCellsCoordinates.filter { survivesThisGeneration(true, aliveNeighboursOf(it)) }
-            val births = aliveCellsCoordinates.flatMap {
-                aliveCell -> aliveCell.neighbours().flatMap {
-                    possibleBirths -> possibleBirths.neighbours().filter { survivesThisGeneration(false, aliveNeighboursOf(it)) } } }
+            val births = aliveCellsCoordinates.flatMap { aliveCell ->
+                aliveCell.neighbours().flatMap { possibleBirths -> possibleBirths.neighbours().filter { survivesThisGeneration(false, aliveNeighboursOf(it)) } }
+            }
             return World(deaths.toSet() + births.toSet())
         }
     }
@@ -152,15 +152,42 @@ class AppTest {
     }
 
     @Test
-    fun `Can create a view`(){
-        assertNotNull(ConwayGoL(320,320))
+    fun `Can create a view`() {
+        assertNotNull(ConwayGoL())
 
     }
-    class ConwayGoL(width: Int, heigh: Int): Application() {
+
+    class ConwayGoL() : Application() {
+        val width = 32
+        val height = 32
         override fun start(primaryStage: Stage?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            val root = StackPane()
+            root.id = "root"
+            val scene = Scene(root, width * 10.0, height * 10.0)
+            root.children.add(board())
+            primaryStage?.title = "Conway's game of life"
+            primaryStage?.isResizable = false
+            primaryStage?.scene = scene
+            primaryStage?.show()
         }
 
+        private fun board(): GridPane {
+            val boardSpace = GridPane()
+            boardSpace.isGridLinesVisible = true
+            (0..height).map { row ->
+                (0..width).map { col ->
+                    boardSpace.add(Rectangle(10.0, 10.0, Color.TRANSPARENT), col, row)
+                }
+            }
+            return boardSpace
+        }
+
+        companion object {
+            @JvmStatic
+            fun main(args: Array<String>) {
+                launch(ConwayGoL::class.java)
+            }
+        }
     }
 
 }
