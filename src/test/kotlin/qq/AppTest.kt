@@ -104,10 +104,10 @@ class AppTest {
 
     @Test
     fun `Can find births`() {
-        assertEquals(setOf(Coordinates.Absolute(1,1)), findBriths(World(emptySet()), World(setOf(Coordinates.Absolute(1,1)))))
+        assertEquals(setOf(Coordinates.Absolute(1,1)), findBirths(World(emptySet()), World(setOf(Coordinates.Absolute(1,1)))))
     }
 
-    private fun findBriths(previous: World, current: World): Set<Coordinates.Absolute> {
+    private fun findBirths(previous: World, current: World): Set<Coordinates.Absolute> {
         return current notIn previous
     }
 
