@@ -102,6 +102,15 @@ class AppTest {
         assertEquals(setOf(Coordinates.Absolute(1,1)), findDeaths(World(setOf(Coordinates.Absolute(1,1))), World(emptySet())))
     }
 
+    @Test
+    fun `Can find births`() {
+        assertEquals(setOf(Coordinates.Absolute(1,1)), findBriths(World(emptySet()), World(setOf(Coordinates.Absolute(1,1)))))
+    }
+
+    private fun findBriths(previous: World, current: World): Set<Coordinates.Absolute> {
+        return current.aliveCellsCoordinates.filter { it !in previous.aliveCellsCoordinates }.toSet()
+    }
+
     private fun findDeaths(previous: World, current: World): Set<Coordinates.Absolute> {
         return previous.aliveCellsCoordinates.filter { it !in current.aliveCellsCoordinates }.toSet()
     }
