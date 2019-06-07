@@ -58,17 +58,26 @@ class AppTest {
 
     @Test
     fun `Cells live in a world`() {
-        assertNotNull(World(listOf(Coordinates.Absolute(0,0))))
-    }
-    @Test
-    fun `Can find the number of alive cells in the neighbourhood`() {
-        assertEquals(1, World(listOf(Coordinates.Absolute(0,0))).aliveNeighboursOf(Coordinates.Absolute(1,1)))
+        assertNotNull(World(listOf(Coordinates.Absolute(0, 0))))
     }
 
+    @Test
+    fun `Can find the number of alive cells in the neighbourhood`() {
+        assertEquals(1, World(listOf(Coordinates.Absolute(0, 0))).aliveNeighboursOf(Coordinates.Absolute(1, 1)))
+    }
+
+    @Test
+    fun `Worlds evolve`() {
+        assertEquals(World(listOf()), World(listOf(Coordinates.Absolute(0, 0))).evolve())
+    }
 
     data class World(val aliveCellsCoordinates: List<Coordinates.Absolute>) {
         fun aliveNeighboursOf(cell: AppTest.Coordinates.Absolute): Int {
             return cell.neighbours().filter { it in aliveCellsCoordinates }.count()
+        }
+
+        fun evolve(): World {
+            return World(this.aliveCellsCoordinates.filter { survivesThisGeneration(true, aliveNeighboursOf(it)) })
         }
     }
 
@@ -88,23 +97,24 @@ class AppTest {
             }
         }
 
-        data class Relative(val x:Int, val y:Int)
+        data class Relative(val x: Int, val y: Int)
     }
 
-    private fun survivesThisGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
-        return when (isAlive) {
-            true -> shouldLive(aliveNeightbours)
-            false -> shouldBecomeALive(aliveNeightbours)
-        }
-    }
+}
 
-    private fun shouldBecomeALive(aliveNeightbours: Int): Boolean {
-        return aliveNeightbours == 3
+fun survivesThisGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
+    return when (isAlive) {
+        true -> shouldLive(aliveNeightbours)
+        false -> shouldBecomeALive(aliveNeightbours)
     }
+}
 
-    private fun shouldLive(aliveNeightbours: Int): Boolean {
-        return aliveNeightbours in 2..3
-    }
+fun shouldBecomeALive(aliveNeightbours: Int): Boolean {
+    return aliveNeightbours == 3
+}
+
+fun shouldLive(aliveNeightbours: Int): Boolean {
+    return aliveNeightbours in 2..3
 }
 
 private fun List<Coordinates.Absolute>.nextGeneration(): List<Coordinates.Absolute> {
