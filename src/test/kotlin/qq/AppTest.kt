@@ -5,7 +5,6 @@ package qq
 
 import kotlin.test.Test
 import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class AppTest {
@@ -29,18 +28,18 @@ class AppTest {
         assertTrue(calculateNextGeneration(false,3))
     }
 
-    private fun calculateNextGeneration(isAlive: Boolean, liveNeightbours: Int): Boolean {
+    private fun calculateNextGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
         return when (isAlive){
-            true -> shouldLive(liveNeightbours)
-            false -> shouldBecomeALive(liveNeightbours)
+            true -> shouldLive(aliveNeightbours)
+            false -> shouldBecomeALive(aliveNeightbours)
         }
     }
 
-    private fun shouldBecomeALive(liveNeightbours: Int): Boolean {
-        return liveNeightbours == 3
+    private fun shouldBecomeALive(aliveNeightbours: Int): Boolean {
+        return aliveNeightbours == 3
     }
 
-    private fun shouldLive(neightbours: Int): Boolean {
-        return neightbours in 2..3
+    private fun shouldLive(aliveNeightbours: Int): Boolean {
+        return aliveNeightbours in 2..3
     }
 }
