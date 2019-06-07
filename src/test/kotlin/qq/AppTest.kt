@@ -99,20 +99,12 @@ class AppTest {
 
     @Test
     fun `Can find deaths`() {
-        assertEquals(setOf(Coordinates.Absolute(1, 1)), findDeaths(World(setOf(Coordinates.Absolute(1, 1))), World(emptySet())))
+        assertEquals(setOf(Coordinates.Absolute(1, 1)), World(setOf(Coordinates.Absolute(1, 1))).findDeaths( World(emptySet())))
     }
 
     @Test
     fun `Can find births`() {
-        assertEquals(setOf(Coordinates.Absolute(1, 1)), findBirths(World(emptySet()), World(setOf(Coordinates.Absolute(1, 1)))))
-    }
-
-    private fun findBirths(previous: World, current: World): Set<Coordinates.Absolute> {
-        return current notIn previous
-    }
-
-    private fun findDeaths(previous: World, current: World): Set<Coordinates.Absolute> {
-        return previous notIn current
+        assertEquals(setOf(Coordinates.Absolute(1, 1)), World(emptySet()).findBirths(World(setOf(Coordinates.Absolute(1, 1)))))
     }
 
     data class World(val aliveCellsCoordinates: Set<Coordinates.Absolute>) {
@@ -129,6 +121,13 @@ class AppTest {
                 aliveCell.neighbours().flatMap { possibleBirths -> possibleBirths.neighbours().filter { survivesThisGeneration(false, aliveNeighboursOf(it)) } }
             }
             return World(deaths.toSet() + births.toSet())
+        }
+        fun findBirths(next: World): Set<Coordinates.Absolute> {
+            return next notIn this
+        }
+
+        fun findDeaths(next: World): Set<Coordinates.Absolute> {
+            return this notIn next
         }
     }
 
@@ -164,9 +163,22 @@ class AppTest {
             val board = drawBoard(primaryStage)
             val initialWorld = World(setOf(Coordinates.Absolute(0,0)))
             initialWorld.aliveCellsCoordinates.map { aliveCell ->
-                val reference: FilteredList<Rectangle> = board.children.filtered { node -> GridPane.getRowIndex(node)== aliveCell.x && GridPane.getColumnIndex(node) == aliveCell.y} as FilteredList<Rectangle>
-                reference.first()?.fill = Color.RED
+                markAsAlive(board, aliveCell)
             }
+            val next = initialWorld.evolve()
+            findBirths()
+        }
+
+        private fun markAsAlive(board: GridPane, aliveCell: Coordinates.Absolute) {
+            paintCell(board, aliveCell.x, aliveCell.y, Color.RED)
+        }
+
+        private fun markAsDead(board: GridPane, aliveCell: Coordinates.Absolute) {
+            paintCell(board, aliveCell.x, aliveCell.y, Color.TRANSPARENT)
+        }
+        private fun paintCell(board: GridPane, x: Int, y: Int, color: Color) {
+            val reference: FilteredList<Rectangle> = board.children.filtered { node -> GridPane.getRowIndex(node) == x && GridPane.getColumnIndex(node) == y } as FilteredList<Rectangle>
+            reference.first()?.fill = color
         }
 
         private fun drawBoard(primaryStage: Stage?): GridPane {
