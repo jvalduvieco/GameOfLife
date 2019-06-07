@@ -49,7 +49,7 @@ class AppTest {
 
     @Test
     fun `Can find neighbours of a central cell`() {
-        assertEquals(listOf(
+        assertEquals(setOf(
                 Coordinates.Absolute(9, 9), Coordinates.Absolute(10, 9), Coordinates.Absolute(11, 9),
                 Coordinates.Absolute(9, 10), Coordinates.Absolute(11, 10),
                 Coordinates.Absolute(9, 11), Coordinates.Absolute(10, 11), Coordinates.Absolute(11, 11)),
@@ -58,37 +58,56 @@ class AppTest {
 
     @Test
     fun `Cells live in a world`() {
-        assertNotNull(World(listOf(Coordinates.Absolute(0, 0))))
+        assertNotNull(World(setOf(Coordinates.Absolute(0, 0))))
     }
 
     @Test
     fun `Can find the number of alive cells in the neighbourhood`() {
-        assertEquals(1, World(listOf(Coordinates.Absolute(0, 0))).aliveNeighboursOf(Coordinates.Absolute(1, 1)))
+        assertEquals(1, World(setOf(Coordinates.Absolute(0, 0))).aliveNeighboursOf(Coordinates.Absolute(1, 1)))
     }
 
     @Test
     fun `Worlds evolve by death`() {
-        assertEquals(World(listOf()), World(listOf(Coordinates.Absolute(0, 0))).evolve())
+        assertEquals(World(setOf()), World(setOf(Coordinates.Absolute(0, 0))).evolve())
     }
 
     @Test
     fun `Still lifes survive forever`() {
-        val block = listOf(
+        val block = setOf(
                 Coordinates.Absolute(0, 0),
                 Coordinates.Absolute(1, 0),
                 Coordinates.Absolute(0, 1),
-                Coordinates.Absolute(1,1))
+                Coordinates.Absolute(1, 1))
 
         assertEquals(World(block), World(block).evolve().evolve())
     }
 
-    data class World(val aliveCellsCoordinates: List<Coordinates.Absolute>) {
-        fun aliveNeighboursOf(cell: AppTest.Coordinates.Absolute): Int {
+    @Test
+    fun `Life, uh, finds a way`() {
+        val verticalLine = setOf(
+                Coordinates.Absolute(0, -1),
+                Coordinates.Absolute(0, 0),
+                Coordinates.Absolute(0, 1))
+
+        val horizontalLine = setOf(
+                Coordinates.Absolute(-1, 0),
+                Coordinates.Absolute(0, 0),
+                Coordinates.Absolute(1, 0))
+
+        assertEquals(World(horizontalLine), World(verticalLine).evolve())
+    }
+
+    data class World(val aliveCellsCoordinates: Set<Coordinates.Absolute>) {
+        fun aliveNeighboursOf(cell: Coordinates.Absolute): Int {
             return cell.neighbours().filter { it in aliveCellsCoordinates }.count()
         }
 
         fun evolve(): World {
-            return World(this.aliveCellsCoordinates.filter { survivesThisGeneration(true, aliveNeighboursOf(it)) })
+            val deaths = aliveCellsCoordinates.filter { survivesThisGeneration(true, aliveNeighboursOf(it)) }
+            val births = aliveCellsCoordinates.flatMap {
+                aliveCell -> aliveCell.neighbours().flatMap {
+                    possibleBirths -> possibleBirths.neighbours().filter { survivesThisGeneration(false, aliveNeighboursOf(it)) } } }
+            return World(deaths.toSet() + births.toSet())
         }
     }
 
@@ -99,12 +118,12 @@ class AppTest {
                 return Absolute(x + other.x, y + other.y)
             }
 
-            fun neighbours(): List<Absolute> {
-                return listOf(
+            fun neighbours(): Set<Absolute> {
+                return setOf(
                         Relative(-1, -1), Relative(0, -1), Relative(1, -1),
                         Relative(-1, 0), Relative(1, 0),
                         Relative(-1, 1), Relative(0, 1), Relative(1, 1)
-                ).map { translate(it) }
+                ).map { translate(it) }.toSet()
             }
         }
 
