@@ -4,11 +4,15 @@
 package qq
 
 import kotlin.test.Test
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 
 class AppTest {
-    @Test fun testAppHasAGreeting() {
-        val classUnderTest = App()
-        assertNotNull(classUnderTest.greeting, "app should have a greeting")
+    @Test fun AnyLiveCellWithFewerThanTwoLiveLeighboursDies() {
+        assertFalse(shouldLive(1))
+    }
+
+    private fun shouldLive(neightbours: Int): Boolean {
+        return false
     }
 }
