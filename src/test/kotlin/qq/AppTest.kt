@@ -161,14 +161,25 @@ class AppTest {
         val width = 32
         val height = 32
         override fun start(primaryStage: Stage?) {
+            val board = drawBoard(primaryStage)
+            val initialWorld = World(setOf(Coordinates.Absolute(0,0)))
+            initialWorld.aliveCellsCoordinates.map { aliveCell ->
+                val reference: FilteredList<Rectangle> = board.children.filtered { node -> GridPane.getRowIndex(node)== aliveCell.x && GridPane.getColumnIndex(node) == aliveCell.y} as FilteredList<Rectangle>
+                reference.first()?.fill = Color.RED
+            }
+        }
+
+        private fun drawBoard(primaryStage: Stage?): GridPane {
             val root = StackPane()
             root.id = "root"
             val scene = Scene(root, width * 10.0, height * 10.0)
-            root.children.add(board())
+            val board = board()
+            root.children.add(board)
             primaryStage?.title = "Conway's game of life"
             primaryStage?.isResizable = false
             primaryStage?.scene = scene
             primaryStage?.show()
+            return board
         }
 
         private fun board(): GridPane {
