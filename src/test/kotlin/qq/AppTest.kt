@@ -166,7 +166,12 @@ class AppTest {
                 markAsAlive(board, aliveCell)
             }
             val next = initialWorld.evolve()
-            findBirths()
+            initialWorld.findBirths(next).map { birth ->
+                markAsAlive(board, birth)
+            }
+            initialWorld.findDeaths(next).map { corpse ->
+                markAsDead(board, corpse)
+            }
         }
 
         private fun markAsAlive(board: GridPane, aliveCell: Coordinates.Absolute) {
