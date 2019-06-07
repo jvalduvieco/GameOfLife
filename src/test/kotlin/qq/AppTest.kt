@@ -108,20 +108,20 @@ class AppTest {
     }
 
     private fun findBriths(previous: World, current: World): Set<Coordinates.Absolute> {
-        return notIn(current, previous)
+        return current notIn previous
     }
 
     private fun findDeaths(previous: World, current: World): Set<Coordinates.Absolute> {
-        return notIn(previous, current)
+        return previous notIn current
     }
-
-    private fun notIn(current: World, previous: World) =
-            current.aliveCellsCoordinates.filter { it !in previous.aliveCellsCoordinates }.toSet()
 
     data class World(val aliveCellsCoordinates: Set<Coordinates.Absolute>) {
         fun aliveNeighboursOf(cell: Coordinates.Absolute): Int {
             return cell.neighbours().filter { it in aliveCellsCoordinates }.count()
         }
+
+        infix fun notIn(other: World): Set<Coordinates.Absolute> =
+                aliveCellsCoordinates.filter { it !in other.aliveCellsCoordinates }.toSet()
 
         fun evolve(): World {
             val deaths = aliveCellsCoordinates.filter { survivesThisGeneration(true, aliveNeighboursOf(it)) }
