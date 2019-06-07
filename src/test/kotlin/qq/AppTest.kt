@@ -41,7 +41,7 @@ class AppTest {
 
     data class Coord(val x: Int, val y: Int) {
 
-        fun absoluteTo(other: Coord): Coord {
+        private fun absoluteTo(other: Coord): Coord {
             return Coord(x + other.x, y + other.y)
         }
 
