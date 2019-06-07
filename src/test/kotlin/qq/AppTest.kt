@@ -58,10 +58,18 @@ class AppTest {
 
     @Test
     fun `Cells live in a world`() {
-        assertNotNull(AliveCells(listOf(Coordinates.Absolute(0,0))))
+        assertNotNull(World(listOf(Coordinates.Absolute(0,0))))
+    }
+    fun `Can find the number of alive cells in the neighbourhood`() {
+        assertEquals(1, World(listOf(Coordinates.Absolute(0,0))).aliveNeighboursOf(Coordinates.Absolute(1,1)))
     }
 
-    data class AliveCells(val aliveCellsCoordinates: List<Coordinates.Absolute>)
+
+    data class World(val aliveCellsCoordinates: List<Coordinates.Absolute>) {
+        fun aliveNeighboursOf(cell: AppTest.Coordinates.Absolute): Int {
+            return cell.neighbours().map { it in aliveCellsCoordinates }.filter { it }.count()
+        }
+    }
 
     class Coordinates {
         data class Absolute(val x: Int, val y: Int) {
