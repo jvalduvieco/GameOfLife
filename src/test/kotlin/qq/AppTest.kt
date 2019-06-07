@@ -33,44 +33,20 @@ class AppTest {
     @Test
     fun `Can find neighbours of a central cell`() {
         assertEquals(listOf(
-                "NW", "N", "NE",
-                "W", "E",
-                "SW", "S", "SE"),
+                Coord(9, 9), Coord(10, 9), Coord(11, 9),
+                Coord(9, 10), Coord(11, 10),
+                Coord(9, 11), Coord(10, 11), Coord(11, 11)),
                 neightbourOf(10, 10))
-    }
-
-    @Test
-    fun `Can translate Direction names to relative positions`() {
-        assertEquals(listOf(
-                "NW", "N", "NE",
-                "W", "E",
-                "SW", "S", "SE").map { toRelativePosition(it) },
-                listOf(
-                        Coord(-1, -1), Coord(0, -1), Coord(1, -1),
-                        Coord(-1, 0), Coord(1, 0),
-                        Coord(-1, 1), Coord(0, 1), Coord(1, 1)))
-    }
-
-    private fun toRelativePosition(directionName: String): Coord {
-        return when (directionName) {
-            "NW" -> Coord(-1, -1)
-            "N" -> Coord(0, -1)
-            "NE" -> Coord(1, -1)
-            "W" -> Coord(-1, 0)
-            "E" -> Coord(1, 0)
-            "SW" -> Coord(-1, 1)
-            "S" -> Coord(0, 1)
-            "SE" -> Coord(1, 1)
-            else -> throw Exception("Huh?!")
-        }
     }
 
     data class Coord(val x: Int, val y: Int)
 
-    private fun neightbourOf(x: Int, y: Int): List<String> {
-        return listOf("NW", "N", "NE",
-                "W", "E",
-                "SW", "S", "SE")
+    private fun neightbourOf(x: Int, y: Int): List<Coord> {
+        return listOf(
+                Coord(-1, -1), Coord(0, -1), Coord(1, -1),
+                Coord(-1, 0), Coord(1, 0),
+                Coord(-1, 1), Coord(0, 1), Coord(1, 1)
+        ).map { Coord(x + it.x, y + it.y) }
     }
 
     private fun survivesThisGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
