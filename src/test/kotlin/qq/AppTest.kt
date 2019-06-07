@@ -9,34 +9,30 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class AppTest {
-    @Test fun AnyLiveCellWithFewerThanTwoLiveLeighboursDies() {
+    @Test fun `Any live cell with fewer than two live neighbours dies`() {
         assertFalse(calculateNextGeneration(true, 1))
     }
 
-    @Test fun AnyLiveCellWithMoreThanOneLiveLeighboursLives() {
+    @Test fun `Any live cell with more than one live neighbours lives`() {
         assertTrue(calculateNextGeneration(true, 2))
     }
 
-    @Test fun AnyLiveCellWithThreeGoesIntoNextGeneration() {
-        assertTrue(shouldLive(3))
+    @Test fun `Any live cell with three goes into next generation`() {
+        assertTrue(calculateNextGeneration(true, 3))
     }
 
-    @Test fun AnyLiveCellWithMoreThanThreeAliveNeighboursDies() {
-        assertFalse(shouldLive(4))
+    @Test fun `Any live cell with more than three alive neighbours dies`() {
+        assertFalse(calculateNextGeneration(true,4))
     }
 
-    @Test fun AnyDeadCellWithMoreThanThreeAliveNeighboursBecomesAlive() {
-        assertTrue(shouldBecomeALive(3))
+    @Test fun `Any dead cell with more than three a live neighbours becomes alive`() {
+        assertTrue(calculateNextGeneration(false,3))
     }
-
-    // @Test fun AnyLiveCellWithMoreThanOneLiveLeighboursLivesNewImplementation() {
-    //     assertFalse(calculateNextGeneration(true, 1))
-    // }
 
     private fun calculateNextGeneration(isAlive: Boolean, liveNeightbours: Int): Boolean {
         return when (isAlive){
             true -> shouldLive(liveNeightbours)
-            false -> TODO()
+            false -> shouldBecomeALive(liveNeightbours)
         }
     }
 
