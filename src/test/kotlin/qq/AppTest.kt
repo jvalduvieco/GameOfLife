@@ -46,15 +46,11 @@ class AppTest {
         }
 
         fun neighbours(): List<Coord> {
-            return neighboursOf(this)
-        }
-
-        private fun neighboursOf(coordinates: Coord): List<Coord> {
             return listOf(
                     Coord(-1, -1), Coord(0, -1), Coord(1, -1),
                     Coord(-1, 0), Coord(1, 0),
                     Coord(-1, 1), Coord(0, 1), Coord(1, 1)
-            ).map { it.absoluteTo(coordinates) }
+            ).map { it.absoluteTo(this) }
         }
     }
 
