@@ -6,13 +6,18 @@ package qq
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class AppTest {
     @Test fun AnyLiveCellWithFewerThanTwoLiveLeighboursDies() {
         assertFalse(shouldLive(1))
     }
 
+    @Test fun AnyLiveCellWithMoreThanOneLiveLeighboursLives() {
+        assertTrue(shouldLive(2))
+    }
+
     private fun shouldLive(neightbours: Int): Boolean {
-        return false
+        return neightbours > 1
     }
 }
