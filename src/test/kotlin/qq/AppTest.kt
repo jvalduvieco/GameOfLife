@@ -17,6 +17,10 @@ class AppTest {
         assertTrue(shouldLive(2))
     }
 
+    @Test fun AnyLiveCellWithThreeGoesIntoNextGeneration() {
+        assertTrue(shouldLive(3))
+    }
+
     private fun shouldLive(neightbours: Int): Boolean {
         return neightbours > 1
     }
