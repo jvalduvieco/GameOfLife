@@ -4,29 +4,49 @@
 package qq
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class AppTest {
-    @Test fun `Any live cell with fewer than two live neighbours dies, as if caused by underpopulation`() {
+    @Test
+    fun `Any live cell with fewer than two live neighbours dies, as if caused by underpopulation`() {
         assertFalse(survivesThisGeneration(true, 1))
     }
 
-    @Test fun `Any live cell with more than three live neighbours dies, as if by overcrowding`() {
-        assertFalse(survivesThisGeneration(true,4))
+    @Test
+    fun `Any live cell with more than three live neighbours dies, as if by overcrowding`() {
+        assertFalse(survivesThisGeneration(true, 4))
     }
 
-    @Test fun `Any live cell with two or three live neighbours lives on to the next generation`() {
+    @Test
+    fun `Any live cell with two or three live neighbours lives on to the next generation`() {
         assertTrue(survivesThisGeneration(true, 2))
         assertTrue(survivesThisGeneration(true, 3))
     }
 
-    @Test fun `Any dead cell with exactly three live neighbours becomes a live cell`() {
-        assertTrue(survivesThisGeneration(false,3))
+    @Test
+    fun `Any dead cell with exactly three live neighbours becomes a live cell`() {
+        assertTrue(survivesThisGeneration(false, 3))
+    }
+
+    @org.junit.Test
+    fun `Can find neighbours of a central cell`() {
+        assertEquals(listOf(
+                "NW", "N", "NW",
+                "W", "W",
+                "SW", "S", "SE"),
+                neightbourOf(10, 10))
+    }
+
+    private fun neightbourOf(x: Int, y: Int): List<String> {
+        return listOf("NW", "N", "NW",
+                "W", "W",
+                "SW", "S", "SE")
     }
 
     private fun survivesThisGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
-        return when (isAlive){
+        return when (isAlive) {
             true -> shouldLive(aliveNeightbours)
             false -> shouldBecomeALive(aliveNeightbours)
         }
