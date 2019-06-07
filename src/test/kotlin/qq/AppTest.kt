@@ -97,6 +97,15 @@ class AppTest {
         assertEquals(World(horizontalLine), World(verticalLine).evolve())
     }
 
+    @Test
+    fun `Can find deaths`() {
+        assertEquals(setOf(Coordinates.Absolute(1,1)), findDeaths(World(setOf(Coordinates.Absolute(1,1))), World(emptySet())))
+    }
+
+    private fun findDeaths(previous: World, current: World): Set<Coordinates.Absolute> {
+        return previous.aliveCellsCoordinates.filter { it !in current.aliveCellsCoordinates }.toSet()
+    }
+
     data class World(val aliveCellsCoordinates: Set<Coordinates.Absolute>) {
         fun aliveNeighboursOf(cell: Coordinates.Absolute): Int {
             return cell.neighbours().filter { it in aliveCellsCoordinates }.count()
