@@ -25,6 +25,14 @@ class AppTest {
         assertFalse(shouldLive(4))
     }
 
+    @Test fun AnyDeadCellWithMoreThanThreeAliveNeighboursBecomesAlive() {
+        assertTrue(shouldBecomeALive(3))
+    }
+
+    private fun shouldBecomeALive(liveNeightbours: Int): Boolean {
+        return liveNeightbours == 3
+    }
+
     private fun shouldLive(neightbours: Int): Boolean {
         return neightbours in 2..3
     }
