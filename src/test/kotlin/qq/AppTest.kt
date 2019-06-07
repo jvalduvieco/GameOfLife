@@ -156,7 +156,7 @@ class AppTest {
         assertNotNull(View(320,320))
 
     }
-    class View(maxX: Int, maxY: Int) {
+    class View(width: Int, heigh: Int) {
 
     }
 
