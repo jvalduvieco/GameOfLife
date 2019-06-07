@@ -33,8 +33,11 @@ class AppTest {
         assertFalse(calculateNextGeneration(true, 1))
     }
 
-    private fun calculateNextGeneration(isAliave: Boolean, liveNeightbours: Int): Boolean {
-        return false
+    private fun calculateNextGeneration(isAlive: Boolean, liveNeightbours: Int): Boolean {
+        return when (isAlive){
+            true -> shouldLive(liveNeightbours)
+            false -> TODO()
+        }
     }
 
     private fun shouldBecomeALive(liveNeightbours: Int): Boolean {
