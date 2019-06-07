@@ -108,12 +108,15 @@ class AppTest {
     }
 
     private fun findBriths(previous: World, current: World): Set<Coordinates.Absolute> {
-        return current.aliveCellsCoordinates.filter { it !in previous.aliveCellsCoordinates }.toSet()
+        return notIn(current, previous)
     }
 
     private fun findDeaths(previous: World, current: World): Set<Coordinates.Absolute> {
-        return previous.aliveCellsCoordinates.filter { it !in current.aliveCellsCoordinates }.toSet()
+        return notIn(previous, current)
     }
+
+    private fun notIn(current: World, previous: World) =
+            current.aliveCellsCoordinates.filter { it !in previous.aliveCellsCoordinates }.toSet()
 
     data class World(val aliveCellsCoordinates: Set<Coordinates.Absolute>) {
         fun aliveNeighboursOf(cell: Coordinates.Absolute): Int {
@@ -126,6 +129,10 @@ class AppTest {
                 aliveCell -> aliveCell.neighbours().flatMap {
                     possibleBirths -> possibleBirths.neighbours().filter { survivesThisGeneration(false, aliveNeighboursOf(it)) } } }
             return World(deaths.toSet() + births.toSet())
+        }
+
+        operator fun contains(other: World): Boolean {
+
         }
     }
 
