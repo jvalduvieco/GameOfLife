@@ -33,15 +33,15 @@ class AppTest {
     @org.junit.Test
     fun `Can find neighbours of a central cell`() {
         assertEquals(listOf(
-                "NW", "N", "NW",
-                "W", "W",
+                "NW", "N", "NE",
+                "W", "E",
                 "SW", "S", "SE"),
                 neightbourOf(10, 10))
     }
 
     private fun neightbourOf(x: Int, y: Int): List<String> {
-        return listOf("NW", "N", "NW",
-                "W", "W",
+        return listOf("NW", "N", "NE",
+                "W", "E",
                 "SW", "S", "SE")
     }
 
