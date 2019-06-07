@@ -67,8 +67,19 @@ class AppTest {
     }
 
     @Test
-    fun `Worlds evolve`() {
+    fun `Worlds evolve by death`() {
         assertEquals(World(listOf()), World(listOf(Coordinates.Absolute(0, 0))).evolve())
+    }
+
+    @Test
+    fun `Still lifes survive forever`() {
+        val block = listOf(
+                Coordinates.Absolute(0, 0),
+                Coordinates.Absolute(1, 0),
+                Coordinates.Absolute(0, 1),
+                Coordinates.Absolute(1,1))
+
+        assertEquals(World(block), World(block).evolve().evolve())
     }
 
     data class World(val aliveCellsCoordinates: List<Coordinates.Absolute>) {
