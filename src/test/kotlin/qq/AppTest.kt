@@ -41,7 +41,7 @@ class AppTest {
 
     data class Coord(val x: Int, val y: Int) {
 
-        private fun absoluteTo(other: Coord): Coord {
+        private fun sum(other: Coord): Coord {
             return Coord(x + other.x, y + other.y)
         }
 
@@ -50,7 +50,7 @@ class AppTest {
                     Coord(-1, -1), Coord(0, -1), Coord(1, -1),
                     Coord(-1, 0), Coord(1, 0),
                     Coord(-1, 1), Coord(0, 1), Coord(1, 1)
-            ).map { it.absoluteTo(this) }
+            ).map { this.sum(it) }
         }
     }
 
