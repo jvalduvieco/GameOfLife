@@ -130,10 +130,6 @@ class AppTest {
                     possibleBirths -> possibleBirths.neighbours().filter { survivesThisGeneration(false, aliveNeighboursOf(it)) } } }
             return World(deaths.toSet() + births.toSet())
         }
-
-        operator fun contains(other: World): Boolean {
-
-        }
     }
 
     class Coordinates {
