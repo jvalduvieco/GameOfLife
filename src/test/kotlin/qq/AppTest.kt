@@ -56,6 +56,13 @@ class AppTest {
                 Coordinates.Absolute(10, 10).neighbours())
     }
 
+    @Test
+    fun `Cells live in a world`() {
+        assertNotNull(AliveCells(listOf(Coordinates.Absolute(0,0))))
+    }
+
+    data class AliveCells(val aliveCellsCoordinates: List<Coordinates.Absolute>)
+
     class Coordinates {
         data class Absolute(val x: Int, val y: Int) {
 
