@@ -39,14 +39,18 @@ class AppTest {
                 neighboursOf(Coord(10, 10)))
     }
 
-    data class Coord(val x: Int, val y: Int)
+    data class Coord(val x: Int, val y: Int) {
+        fun absoluteTo(other: Coord): Coord {
+            return Coord(x + other.x, y + other.y)
+        }
+    }
 
     private fun neighboursOf(coordinates: Coord): List<Coord> {
         return listOf(
                 Coord(-1, -1), Coord(0, -1), Coord(1, -1),
                 Coord(-1, 0), Coord(1, 0),
                 Coord(-1, 1), Coord(0, 1), Coord(1, 1)
-        ).map { Coord( coordinates.x + it.x, coordinates.y + it.y) }
+        ).map { it.absoluteTo(coordinates) }
     }
 
     private fun survivesThisGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
