@@ -33,26 +33,28 @@ class AppTest {
     @Test
     fun `Can find neighbours of a central cell`() {
         assertEquals(listOf(
-                Coord(9, 9), Coord(10, 9), Coord(11, 9),
-                Coord(9, 10), Coord(11, 10),
-                Coord(9, 11), Coord(10, 11), Coord(11, 11)),
-                Coord(10, 10).neighbours())
+                AbsoluteCoordinates(9, 9), AbsoluteCoordinates(10, 9), AbsoluteCoordinates(11, 9),
+                AbsoluteCoordinates(9, 10), AbsoluteCoordinates(11, 10),
+                AbsoluteCoordinates(9, 11), AbsoluteCoordinates(10, 11), AbsoluteCoordinates(11, 11)),
+                AbsoluteCoordinates(10, 10).neighbours())
     }
 
-    data class Coord(val x: Int, val y: Int) {
+    data class AbsoluteCoordinates(val x: Int, val y: Int) {
 
-        private fun sum(other: Coord): Coord {
-            return Coord(x + other.x, y + other.y)
+        private fun translate(other: RelativeCoordinates): AbsoluteCoordinates {
+            return AbsoluteCoordinates(x + other.x, y + other.y)
         }
 
-        fun neighbours(): List<Coord> {
+        fun neighbours(): List<AbsoluteCoordinates> {
             return listOf(
-                    Coord(-1, -1), Coord(0, -1), Coord(1, -1),
-                    Coord(-1, 0), Coord(1, 0),
-                    Coord(-1, 1), Coord(0, 1), Coord(1, 1)
-            ).map { this.sum(it) }
+                    RelativeCoordinates(-1, -1), RelativeCoordinates(0, -1), RelativeCoordinates(1, -1),
+                    RelativeCoordinates(-1, 0), RelativeCoordinates(1, 0),
+                    RelativeCoordinates(-1, 1), RelativeCoordinates(0, 1), RelativeCoordinates(1, 1)
+            ).map { this.translate(it) }
         }
     }
+
+    data class RelativeCoordinates(val x:Int, val y:Int)
 
     private fun survivesThisGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
         return when (isAlive) {
