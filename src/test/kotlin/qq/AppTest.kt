@@ -50,7 +50,7 @@ class AppTest {
                     RelativeCoordinates(-1, -1), RelativeCoordinates(0, -1), RelativeCoordinates(1, -1),
                     RelativeCoordinates(-1, 0), RelativeCoordinates(1, 0),
                     RelativeCoordinates(-1, 1), RelativeCoordinates(0, 1), RelativeCoordinates(1, 1)
-            ).map { this.translate(it) }
+            ).map { translate(it) }
         }
     }
 
