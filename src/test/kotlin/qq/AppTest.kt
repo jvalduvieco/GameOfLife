@@ -33,29 +33,29 @@ class AppTest {
     @Test
     fun `Can find neighbours of a central cell`() {
         assertEquals(listOf(
-                Coordinates.AbsoluteCoordinates(9, 9), Coordinates.AbsoluteCoordinates(10, 9), Coordinates.AbsoluteCoordinates(11, 9),
-                Coordinates.AbsoluteCoordinates(9, 10), Coordinates.AbsoluteCoordinates(11, 10),
-                Coordinates.AbsoluteCoordinates(9, 11), Coordinates.AbsoluteCoordinates(10, 11), Coordinates.AbsoluteCoordinates(11, 11)),
-                Coordinates.AbsoluteCoordinates(10, 10).neighbours())
+                Coordinates.Absolute(9, 9), Coordinates.Absolute(10, 9), Coordinates.Absolute(11, 9),
+                Coordinates.Absolute(9, 10), Coordinates.Absolute(11, 10),
+                Coordinates.Absolute(9, 11), Coordinates.Absolute(10, 11), Coordinates.Absolute(11, 11)),
+                Coordinates.Absolute(10, 10).neighbours())
     }
 
     class Coordinates {
-        data class AbsoluteCoordinates(val x: Int, val y: Int) {
+        data class Absolute(val x: Int, val y: Int) {
 
-            private fun translate(other: RelativeCoordinates): AbsoluteCoordinates {
-                return AbsoluteCoordinates(x + other.x, y + other.y)
+            private fun translate(other: Relative): Absolute {
+                return Absolute(x + other.x, y + other.y)
             }
 
-            fun neighbours(): List<AbsoluteCoordinates> {
+            fun neighbours(): List<Absolute> {
                 return listOf(
-                        RelativeCoordinates(-1, -1), RelativeCoordinates(0, -1), RelativeCoordinates(1, -1),
-                        RelativeCoordinates(-1, 0), RelativeCoordinates(1, 0),
-                        RelativeCoordinates(-1, 1), RelativeCoordinates(0, 1), RelativeCoordinates(1, 1)
+                        Relative(-1, -1), Relative(0, -1), Relative(1, -1),
+                        Relative(-1, 0), Relative(1, 0),
+                        Relative(-1, 1), Relative(0, 1), Relative(1, 1)
                 ).map { translate(it) }
             }
         }
 
-        data class RelativeCoordinates(val x:Int, val y:Int)
+        data class Relative(val x:Int, val y:Int)
     }
 
     private fun survivesThisGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
