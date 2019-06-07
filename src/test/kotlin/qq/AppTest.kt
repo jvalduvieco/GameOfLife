@@ -36,17 +36,17 @@ class AppTest {
                 Coord(9, 9), Coord(10, 9), Coord(11, 9),
                 Coord(9, 10), Coord(11, 10),
                 Coord(9, 11), Coord(10, 11), Coord(11, 11)),
-                neightbourOf(10, 10))
+                neighboursOf(Coord(10, 10)))
     }
 
     data class Coord(val x: Int, val y: Int)
 
-    private fun neightbourOf(x: Int, y: Int): List<Coord> {
+    private fun neighboursOf(coordinates: Coord): List<Coord> {
         return listOf(
                 Coord(-1, -1), Coord(0, -1), Coord(1, -1),
                 Coord(-1, 0), Coord(1, 0),
                 Coord(-1, 1), Coord(0, 1), Coord(1, 1)
-        ).map { Coord(x + it.x, y + it.y) }
+        ).map { Coord( coordinates.x + it.x, coordinates.y + it.y) }
     }
 
     private fun survivesThisGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
