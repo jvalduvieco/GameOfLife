@@ -21,7 +21,11 @@ class AppTest {
         assertTrue(shouldLive(3))
     }
 
+    @Test fun AnyLiveCellWithMoreThanThreeAliveNeighboursDies() {
+        assertFalse(shouldLive(4))
+    }
+
     private fun shouldLive(neightbours: Int): Boolean {
-        return neightbours > 1
+        return neightbours in 2..3
     }
 }
