@@ -14,7 +14,7 @@ class AppTest {
     }
 
     @Test fun AnyLiveCellWithMoreThanOneLiveLeighboursLives() {
-        assertTrue(shouldLive(2))
+        assertTrue(calculateNextGeneration(true, 2))
     }
 
     @Test fun AnyLiveCellWithThreeGoesIntoNextGeneration() {
@@ -29,6 +29,9 @@ class AppTest {
         assertTrue(shouldBecomeALive(3))
     }
 
+    // @Test fun AnyLiveCellWithMoreThanOneLiveLeighboursLivesNewImplementation() {
+    //     assertFalse(calculateNextGeneration(true, 1))
+    // }
 
     private fun calculateNextGeneration(isAlive: Boolean, liveNeightbours: Int): Boolean {
         return when (isAlive){
