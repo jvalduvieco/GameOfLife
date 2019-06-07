@@ -3,6 +3,7 @@
  */
 package qq
 
+import qq.AppTest.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -28,6 +29,22 @@ class AppTest {
     @Test
     fun `Any dead cell with exactly three live neighbours becomes a live cell`() {
         assertTrue(survivesThisGeneration(false, 3))
+    }
+
+    @Test
+    fun `Can calculate next gen`() {
+        assertEqual(listOf(
+                listOf(false, false, false),
+                listOf(false, false, false),
+                listOf(false, false, false)),
+                nextGeneration(listOf(
+                        listOf(false, false, false),
+                        listOf(false, true, false),
+                        listOf(false, false, false))))
+    }
+
+    private fun nextGeneration(rows: List<List<Boolean>>): List<List<Boolean>> {
+        return rows.aliveCells().nextGeneration().toRows()
     }
 
     @Test
@@ -72,4 +89,20 @@ class AppTest {
     private fun shouldLive(aliveNeightbours: Int): Boolean {
         return aliveNeightbours in 2..3
     }
+}
+
+private fun List<Coordinates.Absolute>.nextGeneration(): List<Coordinates.Absolute> {
+    return this.map { it.neighbours() }
+}
+
+private fun List<Coordinates>.toRows(): List<List<Boolean>> {
+    TODO("not implemented")
+}
+
+private fun List<List<Boolean>>.aliveCells(): List<Coordinates.Absolute> {
+    return mapIndexed { rowNumber, columns ->
+        columns.mapIndexed { columnNumber, isAlive ->
+            if (isAlive) Coordinates.Absolute(rowNumber, columnNumber) else null
+        }
+    }.flatten().filterNotNull()
 }
