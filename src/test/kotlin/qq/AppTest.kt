@@ -151,6 +151,15 @@ class AppTest {
         data class Relative(val x: Int, val y: Int)
     }
 
+    @Test
+    fun `Can create a view`(){
+        assertNotNull(View(320,320))
+
+    }
+    class View(maxX: Int, maxY: Int) {
+
+    }
+
 }
 
 fun survivesThisGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
