@@ -9,26 +9,26 @@ import kotlin.test.assertTrue
 
 class AppTest {
     @Test fun `Any live cell with fewer than two live neighbours dies`() {
-        assertFalse(calculateNextGeneration(true, 1))
+        assertFalse(survivesThisGeneration(true, 1))
     }
 
     @Test fun `Any live cell with more than one live neighbours lives`() {
-        assertTrue(calculateNextGeneration(true, 2))
+        assertTrue(survivesThisGeneration(true, 2))
     }
 
     @Test fun `Any live cell with three goes into next generation`() {
-        assertTrue(calculateNextGeneration(true, 3))
+        assertTrue(survivesThisGeneration(true, 3))
     }
 
     @Test fun `Any live cell with more than three alive neighbours dies`() {
-        assertFalse(calculateNextGeneration(true,4))
+        assertFalse(survivesThisGeneration(true,4))
     }
 
     @Test fun `Any dead cell with more than three a live neighbours becomes alive`() {
-        assertTrue(calculateNextGeneration(false,3))
+        assertTrue(survivesThisGeneration(false,3))
     }
 
-    private fun calculateNextGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
+    private fun survivesThisGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
         return when (isAlive){
             true -> shouldLive(aliveNeightbours)
             false -> shouldBecomeALive(aliveNeightbours)
