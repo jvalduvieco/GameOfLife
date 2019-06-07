@@ -153,10 +153,13 @@ class AppTest {
 
     @Test
     fun `Can create a view`(){
-        assertNotNull(View(320,320))
+        assertNotNull(ConwayGoL(320,320))
 
     }
-    class View(width: Int, heigh: Int) {
+    class ConwayGoL(width: Int, heigh: Int): Application() {
+        override fun start(primaryStage: Stage?) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
 
     }
 
