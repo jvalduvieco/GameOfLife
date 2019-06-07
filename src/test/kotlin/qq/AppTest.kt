@@ -36,21 +36,26 @@ class AppTest {
                 Coord(9, 9), Coord(10, 9), Coord(11, 9),
                 Coord(9, 10), Coord(11, 10),
                 Coord(9, 11), Coord(10, 11), Coord(11, 11)),
-                neighboursOf(Coord(10, 10)))
+                Coord(10, 10).neighbours())
     }
 
     data class Coord(val x: Int, val y: Int) {
+
         fun absoluteTo(other: Coord): Coord {
             return Coord(x + other.x, y + other.y)
         }
-    }
 
-    private fun neighboursOf(coordinates: Coord): List<Coord> {
-        return listOf(
-                Coord(-1, -1), Coord(0, -1), Coord(1, -1),
-                Coord(-1, 0), Coord(1, 0),
-                Coord(-1, 1), Coord(0, 1), Coord(1, 1)
-        ).map { it.absoluteTo(coordinates) }
+        fun neighbours(): List<Coord> {
+            return neighboursOf(this)
+        }
+
+        private fun neighboursOf(coordinates: Coord): List<Coord> {
+            return listOf(
+                    Coord(-1, -1), Coord(0, -1), Coord(1, -1),
+                    Coord(-1, 0), Coord(1, 0),
+                    Coord(-1, 1), Coord(0, 1), Coord(1, 1)
+            ).map { it.absoluteTo(coordinates) }
+        }
     }
 
     private fun survivesThisGeneration(isAlive: Boolean, aliveNeightbours: Int): Boolean {
