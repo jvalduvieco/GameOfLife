@@ -29,6 +29,14 @@ class AppTest {
         assertTrue(shouldBecomeALive(3))
     }
 
+    @Test fun AnyLiveCellWithFewerThanTwoLiveLeighboursDiesNewImplementation() {
+        assertFalse(calculateNextGeneration(true, 1))
+    }
+
+    private fun calculateNextGeneration(isAliave: Boolean, liveNeightbours: Int): Boolean {
+        return false
+    }
+
     private fun shouldBecomeALive(liveNeightbours: Int): Boolean {
         return liveNeightbours == 3
     }
