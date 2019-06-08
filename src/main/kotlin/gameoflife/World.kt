@@ -13,7 +13,9 @@ data class World(val aliveCellsCoordinates: Set<Coordinates.Absolute>) {
         val births = aliveCellsCoordinates.flatMap { aliveCell ->
             aliveCell.neighbours().flatMap { possibleBirths -> possibleBirths.neighbours().filter { survivesThisGeneration(false, aliveNeighboursOf(it)) } }
         }
-        return Generation(World(deaths.toSet() + births.toSet()),emptyList())
+        val next = World(deaths.toSet() + births.toSet())
+        val events = findBirths(next).map { CellBorn(it) } + findDeaths(next).map { CellDied(it) }
+        return Generation(next, events.toSet())
     }
 
     fun findBirths(next: World): Set<Coordinates.Absolute> {
@@ -25,4 +27,4 @@ data class World(val aliveCellsCoordinates: Set<Coordinates.Absolute>) {
     }
 }
 
-data class Generation(val world: World, val events: List<Event>)
+data class Generation(val world: World, val events: Collection<Event>)

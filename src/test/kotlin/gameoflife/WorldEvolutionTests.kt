@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 class WorldEvolutionTests {
     @Test
     fun `Worlds evolve by death`() {
-        assertEquals(Generation(World(setOf()), emptyList()), World(setOf(Absolute(0, 0))).evolve())
+        assertEquals(Generation(World(setOf()), setOf(CellDied(Absolute(1,0)))), World(setOf(Absolute(1, 0))).evolve())
     }
 
     @Test
@@ -18,7 +18,7 @@ class WorldEvolutionTests {
                 Absolute(0, 1),
                 Absolute(1, 1))
 
-        assertEquals(Generation(World(block), emptyList()), World(block).evolve().world.evolve())
+        assertEquals(Generation(World(block), emptySet()), World(block).evolve().world.evolve())
     }
 
     @Test
@@ -33,7 +33,14 @@ class WorldEvolutionTests {
                 Absolute(0, 0),
                 Absolute(1, 0))
 
-        assertEquals(Generation(World(horizontalLine), emptyList()), World(verticalLine).evolve())
+        assertEquals(Generation(
+                World(horizontalLine),
+                setOf(
+                        CellDied(Absolute(0,-1)),
+                        CellDied(Absolute(0,1)),
+                        CellBorn(Absolute(-1, 0)),
+                        CellBorn(Absolute(1, 0)))),
+                World(verticalLine).evolve())
     }
     @Test
     fun `Can find deaths`() {
