@@ -34,8 +34,8 @@ class GoLApplication : Application() {
         scene.addEventHandler(KeyEvent.KEY_PRESSED) { key ->
             if (key.code === KeyCode.ENTER) {
                 val next = current.evolve()
-                actOnUI(current, next, board)
-                current = next
+                actOnUI(current, next.first, board)
+                current = next.first
             }
         }
     }
