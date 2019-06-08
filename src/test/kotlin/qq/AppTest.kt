@@ -158,12 +158,12 @@ class AppTest {
     }
 
     class ConwayGoL() : Application() {
-        val width = 32
-        val height = 32
+        val width = 5
+        val height = 5
         override fun start(primaryStage: Stage?) {
             val root = StackPane()
             root.id = "root"
-            val scene = Scene(root, width * 10.0, height * 10.0)
+            val scene = Scene(root, width* 10.0, height* 10.0)
             val board = board()
             root.children.add(board)
             primaryStage?.title = "Conway's game of life"
@@ -208,24 +208,11 @@ class AppTest {
             reference.first()?.fill = color
         }
 
-        private fun drawBoard(primaryStage: Stage?): GridPane {
-            val root = StackPane()
-            root.id = "root"
-            val scene = Scene(root, width * 10.0, height * 10.0)
-            val board = board()
-            root.children.add(board)
-            primaryStage?.title = "Conway's game of life"
-            primaryStage?.isResizable = false
-            primaryStage?.scene = scene
-            primaryStage?.show()
-            return board
-        }
-
         private fun board(): GridPane {
             val boardSpace = GridPane()
             boardSpace.isGridLinesVisible = true
-            (0..height).map { row ->
-                (0..width).map { col ->
+            (0 until height).map { row ->
+                (0 until width).map { col ->
                     boardSpace.add(Rectangle(10.0, 10.0, Color.TRANSPARENT), col, row)
                 }
             }
