@@ -1,76 +1,35 @@
 package gameoflife
 
+import gameoflife.ui.javafx.Board
 import javafx.application.Application
-import javafx.collections.transformation.FilteredList
-import javafx.scene.Scene
-import javafx.scene.input.KeyCode
-import javafx.scene.input.KeyEvent
-import javafx.scene.layout.GridPane
-import javafx.scene.layout.StackPane
-import javafx.scene.paint.Color
-import javafx.scene.shape.Rectangle
 import javafx.stage.Stage
 
 class GoLApplication : Application() {
-    val width = 5
-    val height = 5
-    override fun start(primaryStage: Stage?) {
-        val root = StackPane()
-        root.id = "root"
-        val scene = Scene(root, width * 10.0, height * 10.0)
-        val board = board()
-        root.children.add(board)
-        primaryStage?.title = "Conway's game of life"
-        primaryStage?.isResizable = false
-        primaryStage?.scene = scene
-        primaryStage?.show()
+    lateinit var current: World
+
+    override fun start(primaryStage: Stage) {
         val initialWorld = World(setOf(Coordinates.Absolute(0, 0), Coordinates.Absolute(0, 1), Coordinates.Absolute(0, 2)))
-        var current = initialWorld
-        current.aliveCellsCoordinates.filter { coordinate ->
-            coordinate.x in 0..width && coordinate.y in 0..height
-        }.map { aliveCell ->
-            markAsAlive(board, aliveCell)
-        }
-        scene.addEventHandler(KeyEvent.KEY_PRESSED) { key ->
-            if (key.code === KeyCode.ENTER) {
-                val next = current.evolve()
-                actOnUI(next, board)
-                current = next.world
-            }
+        current = initialWorld
+        val board = Board(primaryStage, onEvolutionTrigger = { board:Board ->
+            current = current.evolve().also { actOnUI(it, board) }.world
+        })
+        initializeBoard(current, board)
+
+    }
+
+    private fun initializeBoard(current: World, board: Board) {
+        current.aliveCellsCoordinates.filter { it.fitsInside(board.width, board.height) }.map { aliveCell ->
+            board.markAsAlive(aliveCell)
         }
     }
 
-    private fun actOnUI(next: Generation, board: GridPane) {
-        next.events.filter { it.isInside(width, height) }.forEach {
+    private fun actOnUI(next: Generation, board: Board) {
+        next.events.filter { it.isInside(board.width, board.height) }.forEach {
             when (it) {
-                is CellBorn -> markAsAlive(board, it.position)
-                is CellDied -> markAsDead(board, it.position)
+                is CellBorn -> board.markAsAlive(it.position)
+                is CellDied -> board.markAsDead(it.position)
             }
         }
-    }
-
-    private fun markAsAlive(board: GridPane, aliveCell: Coordinates.Absolute) {
-        paintCell(board, aliveCell.x, aliveCell.y, Color.RED)
-    }
-
-    private fun markAsDead(board: GridPane, aliveCell: Coordinates.Absolute) {
-        paintCell(board, aliveCell.x, aliveCell.y, Color.TRANSPARENT)
-    }
-
-    private fun paintCell(board: GridPane, x: Int, y: Int, color: Color) {
-        val reference: FilteredList<Rectangle> = board.children.filtered { node -> GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y } as FilteredList<Rectangle>
-        reference.first()?.fill = color
-    }
-
-    private fun board(): GridPane {
-        val boardSpace = GridPane()
-        boardSpace.isGridLinesVisible = true
-        (0 until height).map { row ->
-            (0 until width).map { col ->
-                boardSpace.add(Rectangle(10.0, 10.0, Color.TRANSPARENT), col, row)
-            }
-        }
-        return boardSpace
     }
 
     companion object {
