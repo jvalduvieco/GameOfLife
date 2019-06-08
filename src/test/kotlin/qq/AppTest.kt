@@ -99,7 +99,7 @@ class AppTest {
 
     @Test
     fun `Can find deaths`() {
-        assertEquals(setOf(Coordinates.Absolute(1, 1)), World(setOf(Coordinates.Absolute(1, 1))).findDeaths( World(emptySet())))
+        assertEquals(setOf(Coordinates.Absolute(1, 1)), World(setOf(Coordinates.Absolute(1, 1))).findDeaths(World(emptySet())))
     }
 
     @Test
@@ -122,6 +122,7 @@ class AppTest {
             }
             return World(deaths.toSet() + births.toSet())
         }
+
         fun findBirths(next: World): Set<Coordinates.Absolute> {
             return next notIn this
         }
@@ -160,17 +161,37 @@ class AppTest {
         val width = 32
         val height = 32
         override fun start(primaryStage: Stage?) {
-            val board = drawBoard(primaryStage)
-            val initialWorld = World(setOf(Coordinates.Absolute(0,0)))
-            initialWorld.aliveCellsCoordinates.map { aliveCell ->
+            val root = StackPane()
+            root.id = "root"
+            val scene = Scene(root, width * 10.0, height * 10.0)
+            val board = board()
+            root.children.add(board)
+            primaryStage?.title = "Conway's game of life"
+            primaryStage?.isResizable = false
+            primaryStage?.scene = scene
+            primaryStage?.show()
+            val initialWorld = World(setOf(Coordinates.Absolute(0, 0), Coordinates.Absolute(0, 1), Coordinates.Absolute(0, 2)))
+            var current = initialWorld
+            current.aliveCellsCoordinates.filter { coordinate ->
+                coordinate.x in 0..width && coordinate.y in 0..height
+            }.map { aliveCell ->
                 markAsAlive(board, aliveCell)
             }
-            val next = initialWorld.evolve()
-            initialWorld.findBirths(next).map { birth ->
-                markAsAlive(board, birth)
-            }
-            initialWorld.findDeaths(next).map { corpse ->
-                markAsDead(board, corpse)
+            scene.addEventHandler(KeyEvent.KEY_PRESSED) { key ->
+                if (key.code === KeyCode.ENTER) {
+                    val next = current.evolve()
+                    current.findBirths(next).filter { coordinate ->
+                        coordinate.x in 0..width && coordinate.y in 0..height
+                    }.map { birth ->
+                        markAsAlive(board, birth)
+                    }
+                    current.findDeaths(next).filter { coordinate ->
+                        coordinate.x in 0..width && coordinate.y in 0..height
+                    }.map { corpse ->
+                        markAsDead(board, corpse)
+                    }
+                    current = next
+                }
             }
         }
 
@@ -181,8 +202,9 @@ class AppTest {
         private fun markAsDead(board: GridPane, aliveCell: Coordinates.Absolute) {
             paintCell(board, aliveCell.x, aliveCell.y, Color.TRANSPARENT)
         }
+
         private fun paintCell(board: GridPane, x: Int, y: Int, color: Color) {
-            val reference: FilteredList<Rectangle> = board.children.filtered { node -> GridPane.getRowIndex(node) == x && GridPane.getColumnIndex(node) == y } as FilteredList<Rectangle>
+            val reference: FilteredList<Rectangle> = board.children.filtered { node -> GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y } as FilteredList<Rectangle>
             reference.first()?.fill = color
         }
 
