@@ -42,13 +42,4 @@ class WorldEvolutionTests {
                         CellBorn(Absolute(1, 0)))),
                 World(verticalLine).evolve())
     }
-    @Test
-    fun `Can find deaths`() {
-        assertEquals(setOf(Absolute(1, 1)), World(setOf(Absolute(1, 1))).findDeaths(World(emptySet())))
-    }
-
-    @Test
-    fun `Can find births`() {
-        assertEquals(setOf(Absolute(1, 1)), World(emptySet()).findBirths(World(setOf(Absolute(1, 1)))))
-    }
 }

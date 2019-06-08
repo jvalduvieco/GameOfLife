@@ -18,13 +18,13 @@ data class World(val aliveCellsCoordinates: Set<Coordinates.Absolute>) {
         return Generation(next, events.toSet())
     }
 
-    fun findBirths(next: World): Set<Coordinates.Absolute> {
+    private fun findBirths(next: World): Set<Coordinates.Absolute> {
         return next notIn this
     }
 
-    fun findDeaths(next: World): Set<Coordinates.Absolute> {
+    private fun findDeaths(next: World): Set<Coordinates.Absolute> {
         return this notIn next
     }
 }
 
-data class Generation(val world: World, val events: Collection<Event>)
+data class Generation(val world: World, val events: Collection<LocationAwareEvent>)

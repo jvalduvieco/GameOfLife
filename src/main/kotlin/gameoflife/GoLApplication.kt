@@ -34,22 +34,18 @@ class GoLApplication : Application() {
         scene.addEventHandler(KeyEvent.KEY_PRESSED) { key ->
             if (key.code === KeyCode.ENTER) {
                 val next = current.evolve()
-                actOnUI(current, next.world, board)
+                actOnUI(next, board)
                 current = next.world
             }
         }
     }
 
-    private fun actOnUI(current: World, next: World, board: GridPane) {
-        current.findBirths(next).filter { coordinate ->
-            coordinate.x in 0..width && coordinate.y in 0..height
-        }.map { birth ->
-            markAsAlive(board, birth)
-        }
-        current.findDeaths(next).filter { coordinate ->
-            coordinate.x in 0..width && coordinate.y in 0..height
-        }.map { corpse ->
-            markAsDead(board, corpse)
+    private fun actOnUI(next: Generation, board: GridPane) {
+        next.events.filter { it.isInside(width, height) }.forEach {
+            when (it) {
+                is CellBorn -> markAsAlive(board, it.position)
+                is CellDied -> markAsDead(board, it.position)
+            }
         }
     }
 
