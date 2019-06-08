@@ -23,7 +23,7 @@ class LifeTests {
     }
 
     @Test
-    fun `Any dead cell with exactly three live neighbours becomes a live cell`() {
+    fun `Any dead cell with exactly three live neighbours reborns`() {
         assertTrue(survivesThisGeneration(false, 3))
     }
 }

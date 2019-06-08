@@ -1,5 +1,6 @@
 package gameoflife
 
+import gameoflife.Coordinates.*
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -8,18 +9,19 @@ class NeighbourhoodTests {
     @Test
     fun `Can find neighbours of a central cell`() {
         assertEquals(setOf(
-                Coordinates.Absolute(9, 9), Coordinates.Absolute(10, 9), Coordinates.Absolute(11, 9),
-                Coordinates.Absolute(9, 10), Coordinates.Absolute(11, 10),
-                Coordinates.Absolute(9, 11), Coordinates.Absolute(10, 11), Coordinates.Absolute(11, 11)),
-                Coordinates.Absolute(10, 10).neighbours())
+                Absolute(9, 9), Absolute(10, 9), Absolute(11, 9),
+                Absolute(9, 10), Absolute(11, 10),
+                Absolute(9, 11), Absolute(10, 11), Absolute(11, 11)),
+                Absolute(10, 10).neighbours())
     }
 
     @Test
     fun `Cells live in a world`() {
-        assertNotNull(World(setOf(Coordinates.Absolute(0, 0))))
+        assertNotNull(World(setOf(Absolute(0, 0))))
     }
     @Test
     fun `Can find the number of alive cells in the neighbourhood`() {
-        assertEquals(1, World(setOf(Coordinates.Absolute(0, 0))).aliveNeighboursOf(Coordinates.Absolute(1, 1)))
+        assertEquals(1,
+                World(setOf(Absolute(0, 0))).aliveNeighboursOf(Absolute(1, 1)))
     }
 }
